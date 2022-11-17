@@ -88,13 +88,15 @@ void cria_no(No* no, int indx, string valor, vector<string> traducao, ArvPat* he
     i++;
     int strPos = indx - 1;
     // char sentido = insercao_binario[strPos];
-    char sentido = (strPos >= insercao_binario.size() ? '0' : insercao_binario[strPos]);
+    //indx eh o indice em que o registro sera inserido
+    char sentido_folha = (strPos >= insercao_binario.size() ? '0' : insercao_binario[strPos]);
     No* novo = new No;
     novo->indice = indx;
     novo->ehIndice = true;
 
     int indx_no_atual = no->indice - 1;
-    char sentido_folha = (indx_no_atual >= insercao_binario.size() ? '0' : insercao_binario[indx_no_atual]);
+    //sentido_folha eh a direcao para 
+    char sentido = (indx_no_atual >= insercao_binario.size() ? '0' : insercao_binario[indx_no_atual]);
     // indx_no_atual--;
 
     No* nova_folha = cria_registro(valor, traducao);
@@ -104,47 +106,52 @@ void cria_no(No* no, int indx, string valor, vector<string> traducao, ArvPat* he
         No* antigo_no = head->raiz; //pega o no da raiz para substitui-lo
         head->raiz = novo;
         head->indx = indx; //essa atribuicao eh desnecessaria
-        if (sentido == '0') {
+        if (sentido_folha == '0') {
             novo->left = nova_folha;
             novo->right = antigo_no;
         }
-        else if(sentido == '1') {
+        else if(sentido_folha == '1') {
             novo->right = nova_folha;
             novo->left = antigo_no;
         }
         cout << "cria_no primeiro if -> sentido: " << sentido << "valor: " << nova_folha->registro << "indx: " << novo->indice << endl;
         cout << "no->indice: " << no->indice << endl;
-        cout << "sentido_folha: " << sentido_folha << endl;
         cout << "no->left->indice" << no->left->indice << endl;
+        cout << "antigo_no->ehIndice: " << antigo_no->ehIndice;
+        if(antigo_no->ehIndice) {
+            cout << "antigo_no->indice: " << antigo_no->indice << endl;
+        }
+        else {
+            cout << "antigo_no->registro: " << antigo_no->registro << endl;
+        }
         // cout << "no->left->registro" << no->left->registro << endl;
         // cout << "no->right->indice" << no->right->indice << endl;
         // cout << "no->right->registro" << no->right->registro << endl;
 
         cout << "cria_no no->ehIndice" << (novo->ehIndice) << endl;
         cout << "raiz eh indice: " << (head->raiz->ehIndice) << endl;
-        cout << "condicoes: no->ehIndice == false" << (no->ehIndice == false) << " indx < no->indice" << (indx < no->indice) << endl;
+        cout << "condicoes: no->ehIndice == false: " << (no->ehIndice == false) << " indx < no->indice: " << (indx < no->indice) << endl;
     }
     //se a direcao do registro for esquerda e o indice do prox no for maior
     //eh depois do no atual em q se deve inserir o novo no-indice
     else if (no->left != NULL && sentido == '0' && (indx < no->left->indice || no->left->ehIndice == false)) {
         //a esquerda do novo, neste caso, insere-se a nova folha a ser inserida
-        novo->left = nova_folha;
-        No* aux;
+        No* aux = no->left;
+        no->left = novo;
         // novo->right = 
         if(sentido_folha == '0') {
-            aux = no->left;
-            no->left = novo;
+            novo->left = nova_folha;
+            novo->right = aux;
             cout << "insercao_binario esquerda indx no atual: " << sentido_folha << endl;
         }
         else if(sentido_folha == '1') {
-            aux = no->right;
-            no->right = novo;
+            novo->right = nova_folha;
+            novo->left = aux;
             cout << "insercao_binario esquerda indx no atual: " << sentido_folha << endl;
         }
         //se a direcao do registro no no eh a esquerda,
         //entao qualquer coisa q estava no no antes vai pra direita
         //e a vida continua
-        novo->right = aux;
         cout << "cria_no segundo if -> sentido: " << sentido << "valor: " << nova_folha->registro << "indx: " << novo->indice << endl;
         cout << "sentido_folha" << sentido_folha << endl;
         cout << "no->left->indice" << no->left->indice << endl;
@@ -155,23 +162,23 @@ void cria_no(No* no, int indx, string valor, vector<string> traducao, ArvPat* he
     }
     else if (no->right != NULL && sentido == '1' && (indx < no->right->indice || no->right->ehIndice == false)) {
         //a esquerda do novo, neste caso, insere-se a nova folha a ser inserida
-        novo->right = nova_folha;
-        No* aux;
+        No* aux = no->right;
+        no->right = novo;
         // novo->right = 
         if(sentido_folha == '0') {
-            aux = no->left;
-            no->left = novo;
-            cout << "insercao_binario direita indx no atual: " << sentido_folha << endl;
+            novo->left = nova_folha;
+            novo->right = aux;
+            cout << "insercao_binario esquerda indx no atual: " << sentido_folha << endl;
         }
         else if(sentido_folha == '1') {
-            aux = no->right;
-            no->right = novo;
-            cout << "insercao_binario direita indx no atual: " << sentido_folha << endl;
+            novo->right = nova_folha;
+            novo->left = aux;
+            cout << "insercao_binario esquerda indx no atual: " << sentido_folha << endl;
         }
+
         //se a direcao do registro no no eh a direita,
         //entao qualquer coisa q estava no no antes vai pra esquerda
         //e a vida continua
-        novo->left = aux;
         cout << "cria_no terceiro if -> sentido: " << sentido << "valor: " << nova_folha->registro << "indx: " << novo->indice << endl;
         cout << "sentido_folha" << sentido_folha << endl;
         cout << "no->left->indice" << no->left->indice << endl;
@@ -181,7 +188,7 @@ void cria_no(No* no, int indx, string valor, vector<string> traducao, ArvPat* he
     }
     //caso o sentido seja a esquerda, mas o indice do valor ainda seja maior do q o proximo valor,
     //ou se o proximo valor ainda nao for uma folha
-    else if(no->left != NULL && sentido_folha == '0') {
+    else if(no->left != NULL && sentido == '0') {
         cout << (indx < no->right->indice) << " " << (no->right->ehIndice == false) << endl;
         cout << "cria_no quarto if -> sentido: " << sentido << "valor: " << nova_folha->registro << "indx: " << novo->indice << endl;
         cout << "sentido_folha" << sentido_folha << endl;
@@ -192,7 +199,7 @@ void cria_no(No* no, int indx, string valor, vector<string> traducao, ArvPat* he
         cria_no(no->left, indx, valor, traducao, head, insercao_binario, i);
     }
 
-    else if(no->right != NULL && sentido_folha == '1') {
+    else if(no->right != NULL && sentido == '1') {
         cout << "cria_no quinto if -> sentido: " << sentido << "valor: " << nova_folha->registro << "indx: " << novo->indice << endl;
         cria_no(no->right, indx, valor, traducao, head, insercao_binario, i);
     }
@@ -219,6 +226,7 @@ void insere_registro(No* no, string valor, vector<string> traducao, ArvPat* head
             insercao_binario = fromAlphaToBin(valor);
         }
         if(no->ehIndice) {
+            cout << "no->indice: " << no->indice << endl;
 
             int indice = no->indice - 1;
             // int i = 0;
