@@ -1,6 +1,6 @@
-1-RESOVLIDO: argumento errado na primeira chamada do cria_no. Era pra ser a raiz.
-2-RESOLVIDO: tamanho insuficiente da variavel insercao_binario quando o indice era maior do q a representacao
-3-RESOLVIDO: inserção da sequência:
+1-SOLVED: argumento errado na primeira chamada do cria_no. Era pra ser a raiz.
+2-SOLVED: tamanho insuficiente da variavel insercao_binario quando o indice era maior do q a representacao
+3-SOLVED: inserção da sequência:
             a
             l
             g
